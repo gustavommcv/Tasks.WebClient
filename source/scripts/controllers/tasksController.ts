@@ -1,4 +1,6 @@
 import taskView from '../views/taskView';
+import addTaskView from '../views/addTaskView';
+
 import { state } from '../data/state';
 import * as task from '../models/task';
 
@@ -17,10 +19,27 @@ const controlTasks = async function(status = '') {
     }
 }
 
+const controlAddTask = async function() {
+    try {
+        // 1) Rendering form
+        addTaskView.renderForm();
+
+        // 2) Get form params
+
+        // 3) Send post request to the api
+
+    } catch (error) {
+        console.error("Error loading tasks: ", error);
+    }
+}
+
 export const init = async function() {
     // Rendering tasks on page load
     controlTasks();
 
     // Rendering quests from button events
     taskView.addHandlerRender(controlTasks);
+
+    // Rendering form from button event
+    addTaskView.addEventHandlers(controlAddTask);
 }

@@ -11,7 +11,6 @@ export const getJSON = async function(url) {
 
         const response: Response = result;
 
-        
         // JSON parse
         const data = await response.json();
 

@@ -60,6 +60,44 @@
   };
   var taskView_default = new TaskView();
 
+  // source/scripts/views/addTaskView.ts
+  var AddTaskView = class extends View {
+    form = document.querySelector(".form");
+    blurContainer = document.querySelector(".blur");
+    closeFormBtn = document.querySelector(".close-button");
+    generateMarkup(element) {
+      throw new Error("Method not implemented.");
+    }
+    renderForm() {
+      this.form?.classList.toggle("hidden");
+      this.blurContainer?.classList.toggle("hidden");
+    }
+    addEventHandlers(handler) {
+      const button = document.querySelector(".data-container__button");
+      button?.addEventListener("click", handler);
+      this.closeFormEvents();
+    }
+    closeFormEvents() {
+      this.blurContainer?.addEventListener("click", () => {
+        this.toggleForm();
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !this.form?.classList.contains("hidden")) {
+          this.toggleForm();
+        }
+      });
+      this.closeFormBtn?.addEventListener("click", (e) => {
+        e.preventDefault();
+        this.toggleForm();
+      });
+    }
+    toggleForm() {
+      this.form?.classList.toggle("hidden");
+      this.blurContainer?.classList.toggle("hidden");
+    }
+  };
+  var addTaskView_default = new AddTaskView();
+
   // source/scripts/data/state.ts
   var state = {
     tasks: []
@@ -137,9 +175,17 @@
       console.error("Error loading tasks: ", error);
     }
   };
+  var controlAddTask = async function() {
+    try {
+      addTaskView_default.renderForm();
+    } catch (error) {
+      console.error("Error loading tasks: ", error);
+    }
+  };
   var init = async function() {
     controlTasks();
     taskView_default.addHandlerRender(controlTasks);
+    addTaskView_default.addEventHandlers(controlAddTask);
   };
 
   // source/scripts/index.ts

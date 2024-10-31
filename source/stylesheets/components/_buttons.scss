@@ -57,3 +57,19 @@
         color: rgb(237, 237, 237);
     }
 }
+
+.close-button {
+    padding: .5rem 1rem;
+    border-radius: .3rem;
+    display: inline;
+    background-color: rgb(252, 99, 99);
+    color: white;
+
+    @media (max-width: 550px) {
+        margin-right: .1rem;
+    }
+
+    &:hover {
+        background-color: #ff2a2a;
+    }
+}

@@ -60,52 +60,14 @@
   };
   var taskView_default = new TaskView();
 
-  // source/scripts/views/addTaskView.ts
-  var AddTaskView = class extends View {
-    form = document.querySelector(".form");
-    blurContainer = document.querySelector(".blur");
-    closeFormBtn = document.querySelector(".close-button");
-    generateMarkup(element) {
-      throw new Error("Method not implemented.");
-    }
-    renderForm() {
-      this.form?.classList.toggle("hidden");
-      this.blurContainer?.classList.toggle("hidden");
-    }
-    addEventHandlers(handler) {
-      const button = document.querySelector(".data-container__button");
-      button?.addEventListener("click", handler);
-      this.closeFormEvents();
-    }
-    closeFormEvents() {
-      this.blurContainer?.addEventListener("click", () => {
-        this.toggleForm();
-      });
-      document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && !this.form?.classList.contains("hidden")) {
-          this.toggleForm();
-        }
-      });
-      this.closeFormBtn?.addEventListener("click", (e) => {
-        e.preventDefault();
-        this.toggleForm();
-      });
-    }
-    toggleForm() {
-      this.form?.classList.toggle("hidden");
-      this.blurContainer?.classList.toggle("hidden");
-    }
-  };
-  var addTaskView_default = new AddTaskView();
+  // source/scripts/config.ts
+  var API_URL = "https://localhost:7244/api/tasks";
+  var TIMEOUT_SEC = 10;
 
   // source/scripts/data/state.ts
   var state = {
     tasks: []
   };
-
-  // source/scripts/config.ts
-  var API_URL = "https://localhost:7244/api/tasks";
-  var TIMEOUT_SEC = 10;
 
   // source/scripts/helpers/timeout.ts
   var timeout = function(s) {
@@ -165,6 +127,64 @@
     return state.tasks;
   };
 
+  // source/scripts/views/addTaskView.ts
+  var AddTaskView = class extends View {
+    form = document.querySelector(".form");
+    blurContainer = document.querySelector(".blur");
+    closeFormBtn = document.querySelector(".close-button");
+    generateMarkup(element) {
+      throw new Error("Method not implemented.");
+    }
+    renderForm() {
+      this.form?.classList.toggle("hidden");
+      this.blurContainer?.classList.toggle("hidden");
+    }
+    addEventHandlers(submitHandler) {
+      const button = document.querySelector(".data-container__button");
+      button?.addEventListener("click", () => {
+        this.renderForm();
+      });
+      this.closeFormEvents();
+      this.form?.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const data = this.getFormData();
+        if (data) {
+          submitHandler(data);
+        }
+        this.toggleForm();
+      });
+    }
+    closeFormEvents() {
+      this.blurContainer?.addEventListener("click", () => {
+        this.toggleForm();
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !this.form?.classList.contains("hidden")) {
+          this.toggleForm();
+        }
+      });
+      this.closeFormBtn?.addEventListener("click", (e) => {
+        e.preventDefault();
+        this.toggleForm();
+      });
+    }
+    toggleForm() {
+      this.form?.classList.toggle("hidden");
+      this.blurContainer?.classList.toggle("hidden");
+    }
+    getFormData() {
+      if (!this.form) return null;
+      const titleInput = document.getElementById("title");
+      const descriptionInput = document.getElementById("description");
+      const statusInput = document.getElementById("status");
+      const title = titleInput ? titleInput.value : "";
+      const description = descriptionInput ? descriptionInput.value : "";
+      const status = statusInput ? statusInput.value : "";
+      return new Task("", title, description, status);
+    }
+  };
+  var addTaskView_default = new AddTaskView();
+
   // source/scripts/controllers/tasksController.ts
   var controlTasks = async function(status = "") {
     try {
@@ -175,9 +195,10 @@
       console.error("Error loading tasks: ", error);
     }
   };
-  var controlAddTask = async function() {
+  var controlAddTask = async function(data) {
     try {
-      addTaskView_default.renderForm();
+      const data2 = addTaskView_default.getFormData();
+      console.log(data2);
     } catch (error) {
       console.error("Error loading tasks: ", error);
     }

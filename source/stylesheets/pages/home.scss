@@ -1,0 +1,20 @@
+.main {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+}
+
+.data-container {
+    width: 100%;
+
+    &__header {
+        display: flex;
+        flex-direction: row-reverse;
+        padding: 1rem;
+        justify-content: space-between;
+
+        // border-bottom: 1px solid black;
+        width: 100%;
+    }
+} 

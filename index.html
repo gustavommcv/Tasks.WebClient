@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="dist/stylesheets/index.css">
+
+    <script defer src="dist/scripts/index.js"></script>
+</head>
+<body>
+    <div class="blur hidden"></div>
+    <div class="form hidden">
+        <form id="taskForm" class="task-form">
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select id="status" name="status">
+                    <option value="Pending">Pending</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+
+            <button type="submit" class="button submit-button">Create Task</button>
+        </form>
+    </div>
+
+    <header class="header">
+        <div class="header__description">
+            <img src="dist/stylesheets/img/logo.png" alt="Logo" class="header__logo">
+            <h1 class="header__title">Task Manager</h1>
+        </div>
+
+        <div class="header__login">
+            <button class="button register__button">Log in</button>
+            <button class="button register__button">Sign up</button>
+        </div>
+    </header>
+
+    <main class="main">
+        <aside class="aside">
+            <button class="button aside__button aside__button--home" data-status="">Home</button>
+            <button class="button aside__button aside__button--pending" data-status="Pending">Pending</button>
+            <button class="button aside__button aside__button--completed" data-status="Completed">Completed</button>
+        </aside>
+
+        <div class="data-container">
+            <div class="data-container__header">
+                <button class="button data-container__button">Add Task</button>
+            </div>
+
+            <table class="task-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="tbody">
+                    <!-- SAMPLE
+                     <tr>
+                        <td data-label="Title">Math Homework</td>
+                        <td data-label="Status">Pending</td>
+                        <td data-label="Description">Complete exercises 1 to 10</td>
+                        <td data-label="Action">
+                            <button class="action-button button edit">✏️</button>
+                            <button class="action-button button delete">🗑️</button>
+                        </td>
+                    </tr> -->
+                </tbody>
+            </table>            
+            
+        </div>
+    </main>
+</body>
+</html>

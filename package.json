@@ -1,0 +1,16 @@
+{
+  "name": "tasks.webclient",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "node esbuild.config.js"
+  },
+  "author": "Gustavo Monnerat",
+  "license": "ISC",
+  "description": "To do app",
+  "devDependencies": {
+    "@types/node": "^22.8.5",
+    "esbuild": "^0.24.0",
+    "esbuild-sass-plugin": "^3.3.1"
+  }
+}

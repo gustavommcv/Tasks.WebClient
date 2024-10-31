@@ -92,6 +92,35 @@
     }
   };
 
+  // source/scripts/helpers/getStatusFromString.ts
+  var getStatusFromString = (statusString) => {
+    switch (statusString) {
+      case "Pending":
+        return 0 /* Pending */;
+      case "Completed":
+        return 1 /* Completed */;
+      default:
+        throw new Error(`Invalid status: ${statusString}`);
+    }
+  };
+
+  // source/scripts/helpers/postRequest.ts
+  var postRequest = async (taskData) => {
+    const response = await fetch(`${API_URL}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(taskData)
+    });
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`Error adding task: ${errorMessage}`);
+    }
+    const data = await response.json();
+    console.log("Task added successfully:", data);
+  };
+
   // source/scripts/models/task.ts
   var Task = class {
     id;
@@ -126,6 +155,15 @@
     }
     return state.tasks;
   };
+  var addTask = async function(task) {
+    if (!task) throw new Error("No task");
+    const taskData = {
+      title: task.title,
+      description: task.description,
+      status: getStatusFromString(task.status)
+    };
+    await postRequest(taskData);
+  };
 
   // source/scripts/views/addTaskView.ts
   var AddTaskView = class extends View {
@@ -150,6 +188,7 @@
         const data = this.getFormData();
         if (data) {
           submitHandler(data);
+          this.clearFormFields();
         }
         this.toggleForm();
       });
@@ -167,6 +206,15 @@
         e.preventDefault();
         this.toggleForm();
       });
+    }
+    clearFormFields() {
+      if (!this.form) return;
+      const titleInput = document.getElementById("title");
+      const descriptionInput = document.getElementById("description");
+      const statusInput = document.getElementById("status");
+      if (titleInput) titleInput.value = "";
+      if (descriptionInput) descriptionInput.value = "";
+      if (statusInput) statusInput.selectedIndex = 0;
     }
     toggleForm() {
       this.form?.classList.toggle("hidden");
@@ -195,10 +243,12 @@
       console.error("Error loading tasks: ", error);
     }
   };
-  var controlAddTask = async function(data) {
+  var controlAddTask = async function() {
     try {
-      const data2 = addTaskView_default.getFormData();
-      console.log(data2);
+      const data = addTaskView_default.getFormData();
+      await addTask(data);
+      await loadTasks();
+      controlTasks();
     } catch (error) {
       console.error("Error loading tasks: ", error);
     }

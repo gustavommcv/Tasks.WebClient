@@ -1,6 +1,8 @@
 import { API_URL } from "../config";
 import { state } from "../data/state";
 import { getJSON } from "../helpers/getJSON";
+import { getStatusFromString } from "../helpers/getStatusFromString";
+import { postRequest } from "../helpers/postRequest";
 
 export class Task {
     public id: string;
@@ -42,3 +44,16 @@ export const getTasks = function(status = '') {
     }
     return state.tasks;
 };
+
+export const addTask = async function(task: Task | null) {
+    if (!task) throw new Error("No task");
+
+    const taskData = {
+        title: task.title,
+        description: task.description,
+        status: getStatusFromString(task.status),
+    };
+
+    await postRequest(taskData);
+}
+

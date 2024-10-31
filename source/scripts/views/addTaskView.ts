@@ -33,6 +33,7 @@ class AddTaskView extends View {
             // Checks that the data has been obtained correctly before calling the handler
             if (data) {
                 submitHandler(data); // Calls the submitHandler with the form data
+                this.clearFormFields(); // Clear the form inputs
             }
     
             this.toggleForm(); // Close the form after sending
@@ -56,6 +57,19 @@ class AddTaskView extends View {
             this.toggleForm();
         });
     }
+
+    private clearFormFields() {
+        if (!this.form) return;
+    
+        const titleInput = document.getElementById('title') as HTMLInputElement | null;
+        const descriptionInput = document.getElementById('description') as HTMLTextAreaElement | null;
+        const statusInput = document.getElementById('status') as HTMLSelectElement | null;
+    
+        if (titleInput) titleInput.value = '';
+        if (descriptionInput) descriptionInput.value = '';
+        if (statusInput) statusInput.selectedIndex = 0;
+    }
+    
 
     private toggleForm() {
         this.form?.classList.toggle('hidden');

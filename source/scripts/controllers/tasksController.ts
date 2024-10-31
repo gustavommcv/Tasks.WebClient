@@ -19,14 +19,17 @@ const controlTasks = async function(status = '') {
     }
 }
 
-const controlAddTask = async function(data: task.Task) {
+const controlAddTask = async function() {
     try {
         // 1) Get form params
         const data = addTaskView.getFormData();
-        console.log(data);
 
         // 2) Send post request to the api
-        // task.addTask();
+        await task.addTask(data);
+
+        // 3) Update UI with new task
+        await task.loadTasks();
+        controlTasks();
 
     } catch (error) {
         console.error("Error loading tasks: ", error);

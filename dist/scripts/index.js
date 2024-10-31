@@ -1,65 +1,4 @@
 (() => {
-  // source/scripts/config.ts
-  var API_URL = "https://localhost:7244/api/tasks";
-  var TIMEOUT_SEC = 10;
-
-  // source/scripts/helpers/timeout.ts
-  var timeout = function(s) {
-    return new Promise(function(_, reject) {
-      setTimeout(function() {
-        reject(new Error(`Request took too long! Timeout after ${s} seconds`));
-      }, s * 1e3);
-    });
-  };
-
-  // source/scripts/helpers/getJSON.ts
-  var getJSON = async function(url) {
-    try {
-      const result = await Promise.race([fetch(url), timeout(TIMEOUT_SEC)]);
-      if (!(result instanceof Response)) throw new Error("Request timed out or failed");
-      const response = result;
-      const data = await response.json();
-      if (!response.ok) throw new Error(`${response.status}`);
-      return data;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  // source/scripts/models/task.ts
-  var Task = class {
-    constructor(id, title, description, status) {
-      this.id = id;
-      this.title = title;
-      this.description = description;
-      this.status = status;
-    }
-  };
-  var state = {
-    tasks: []
-  };
-  var loadTasks = async function() {
-    try {
-      const data = await getJSON(`${API_URL}`);
-      state.tasks = data.map((element) => new Task(
-        element.id,
-        element.title,
-        element.description,
-        element.status
-      ));
-    } catch (error) {
-      throw error;
-    }
-  };
-  var getTasks = function(status = "") {
-    if (status === "Pending") {
-      return state.tasks.filter((t) => t.status === "Pending");
-    } else if (status === "Completed") {
-      return state.tasks.filter((t) => t.status === "Completed");
-    }
-    return state.tasks;
-  };
-
   // source/scripts/views/View.ts
   var View = class {
     data;
@@ -121,17 +60,84 @@
   };
   var taskView_default = new TaskView();
 
+  // source/scripts/data/state.ts
+  var state = {
+    tasks: []
+  };
+
+  // source/scripts/config.ts
+  var API_URL = "https://localhost:7244/api/tasks";
+  var TIMEOUT_SEC = 10;
+
+  // source/scripts/helpers/timeout.ts
+  var timeout = function(s) {
+    return new Promise(function(_, reject) {
+      setTimeout(function() {
+        reject(new Error(`Request took too long! Timeout after ${s} seconds`));
+      }, s * 1e3);
+    });
+  };
+
+  // source/scripts/helpers/getJSON.ts
+  var getJSON = async function(url) {
+    try {
+      const result = await Promise.race([fetch(url), timeout(TIMEOUT_SEC)]);
+      if (!(result instanceof Response)) throw new Error("Request timed out or failed");
+      const response = result;
+      const data = await response.json();
+      if (!response.ok) throw new Error(`${response.status}`);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  // source/scripts/models/task.ts
+  var Task = class {
+    id;
+    title;
+    description;
+    status;
+    constructor(id, title, description, status) {
+      this.id = id;
+      this.description = description;
+      this.title = title;
+      this.status = status;
+    }
+  };
+  var loadTasks = async function() {
+    try {
+      const data = await getJSON(`${API_URL}`);
+      state.tasks = data.map((element) => new Task(
+        element.id,
+        element.title,
+        element.description,
+        element.status
+      ));
+    } catch (error) {
+      throw error;
+    }
+  };
+  var getTasks = function(status = "") {
+    if (status === "Pending") {
+      return state.tasks.filter((t) => t.status === "Pending");
+    } else if (status === "Completed") {
+      return state.tasks.filter((t) => t.status === "Completed");
+    }
+    return state.tasks;
+  };
+
   // source/scripts/controllers/tasksController.ts
   var controlTasks = async function(status = "") {
     try {
       taskView_default.renderSpinner();
+      if (state.tasks.length < 1) await loadTasks();
       taskView_default.render(getTasks(status));
     } catch (error) {
-      console.error("Error loading tasks:", error);
+      console.error("Error loading tasks: ", error);
     }
   };
   var init = async function() {
-    if (state.tasks.length < 1) await loadTasks();
     controlTasks();
     taskView_default.addHandlerRender(controlTasks);
   };

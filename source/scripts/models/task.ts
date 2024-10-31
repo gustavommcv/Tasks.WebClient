@@ -1,24 +1,20 @@
-import { API_URL } from '../config';
-import { getJSON } from '../helpers/getJSON';
+import { API_URL } from "../config";
+import { state } from "../data/state";
+import { getJSON } from "../helpers/getJSON";
 
-class Task {
-    constructor(
-        public id: string,
-        public title: string,
-        public description: string,
-        public status: string
-    ) {}
+export class Task {
+    public id: string;
+    public title: string;
+    public description: string;
+    public status: string;
+
+    constructor(id: string, title: string, description: string, status: string) {
+        this.id = id;
+        this.description = description;
+        this.title = title;
+        this.status = status;
+    }
 }
-
-// Interface that defines the state of the application
-interface State {
-    tasks: Task[];
-}
-
-// Inicializing the state with an empty array of tasks
-export const state: State = {
-    tasks: []
-};
 
 export const loadTasks = async function(): Promise<void> {
     try {

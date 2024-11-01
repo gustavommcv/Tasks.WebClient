@@ -35,6 +35,21 @@
         <button class="button close-button">Close</button>
     </div>
 
+    <div class="blur-delete hidden"></div>
+    <div class="delete-confirmation hidden">
+        <div class="delete-confirmation__content">
+            <h2 class="delete-confirmation__title">Confirm Deletion</h2>
+            <p class="delete-confirmation__message">Are you sure you want to delete this task?</p>
+            <p class="delete-confirmation__message">ID: <span class="delete-confirmation__id"></span></p>
+            <p class="delete-confirmation__message">Title: <span class="delete-confirmation__task-title"></span></p>
+            <div class="delete-confirmation__actions">
+                <button class="button delete-confirmation__button confirm">Yes, Delete</button>
+                <button class="button delete-confirmation__button cancel">Cancel</button>
+            </div>
+        </div>
+    </div>    
+       
+
     <header class="header">
         <div class="header__description">
             <img src="dist/stylesheets/img/logo.png" alt="Logo" class="header__logo">

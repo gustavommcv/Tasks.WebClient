@@ -1,5 +1,6 @@
 import taskView from '../views/taskView';
 import addTaskView from '../views/addTaskView';
+import deleteTaskView from '../views/deleteTaskView';
 
 import { state } from '../data/state';
 import * as task from '../models/task';
@@ -36,13 +37,25 @@ const controlAddTask = async function() {
     }
 }
 
+const controlDeleteTask = async function() {
+    try {
+        
+
+    } catch (error) {
+        console.error("Error loading tasks: ", error);
+    }
+}
+
 export const init = async function() {
     // Rendering tasks on page load
-    controlTasks();
+    await controlTasks();
 
-    // Rendering quests from button events
+    // Rendering tasks from button events
     taskView.addHandlerRender(controlTasks);
 
     // Rendering form from button event
     addTaskView.addEventHandlers(controlAddTask);
+
+    // Delete
+    deleteTaskView.addEventHandlers(controlDeleteTask);
 }

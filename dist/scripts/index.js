@@ -233,6 +233,60 @@
   };
   var addTaskView_default = new AddTaskView();
 
+  // source/scripts/views/deleteTaskView.ts
+  var DeleteViewTask = class extends View {
+    deleteConfirmationMenu;
+    blurContainer;
+    generateMarkup(element) {
+      throw new Error("Method not implemented.");
+    }
+    addEventHandlers(handler) {
+      this.cacheDOMElements();
+      this.bindEvents(handler);
+    }
+    cacheDOMElements() {
+      this.deleteConfirmationMenu = document.querySelector(".delete-confirmation");
+      this.blurContainer = document.querySelector(".blur-delete");
+    }
+    bindEvents(handler) {
+      const deleteButtons = document.querySelectorAll(".delete");
+      deleteButtons.forEach((button) => {
+        const deleteButton = button;
+        deleteButton.addEventListener("click", () => {
+          const id = deleteButton.dataset.id;
+          const task = state.tasks.filter((t) => t.id === id)[0];
+          this.renderMenu(task.id, task.title);
+        });
+      });
+      this.blurContainer?.addEventListener("click", () => this.toggleMenu());
+      this.addCancelButtonEvent();
+      this.addEscapeKeyEvent();
+    }
+    addCancelButtonEvent() {
+      const cancelBtn = document.querySelector(".cancel");
+      cancelBtn?.addEventListener("click", () => this.toggleMenu());
+    }
+    addEscapeKeyEvent() {
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !this.deleteConfirmationMenu?.classList.contains("hidden")) {
+          this.toggleMenu();
+        }
+      });
+    }
+    renderMenu(id, title) {
+      const idElement = document.querySelector(".delete-confirmation__id");
+      const titleElement = document.querySelector(".delete-confirmation__task-title");
+      if (idElement) idElement.textContent = id;
+      if (titleElement) titleElement.textContent = title;
+      this.toggleMenu();
+    }
+    toggleMenu() {
+      this.deleteConfirmationMenu?.classList.toggle("hidden");
+      this.blurContainer?.classList.toggle("hidden");
+    }
+  };
+  var deleteTaskView_default = new DeleteViewTask();
+
   // source/scripts/controllers/tasksController.ts
   var controlTasks = async function(status = "") {
     try {
@@ -253,10 +307,17 @@
       console.error("Error loading tasks: ", error);
     }
   };
+  var controlDeleteTask = async function() {
+    try {
+    } catch (error) {
+      console.error("Error loading tasks: ", error);
+    }
+  };
   var init = async function() {
-    controlTasks();
+    await controlTasks();
     taskView_default.addHandlerRender(controlTasks);
     addTaskView_default.addEventHandlers(controlAddTask);
+    deleteTaskView_default.addEventHandlers(controlDeleteTask);
   };
 
   // source/scripts/index.ts

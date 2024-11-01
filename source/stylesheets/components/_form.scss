@@ -1,4 +1,4 @@
-.form {
+.form, .delete-confirmation {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -9,6 +9,37 @@
     
     padding: 2rem;
     border-radius: 20px;
+}
+
+.delete-confirmation {
+    background-color: white;
+    border: 1px solid  rgb(172, 172, 172);;
+
+    &__title {
+        margin-bottom: 2rem;
+    }
+
+    &__message {
+        margin-bottom: 1rem;
+    }
+
+    &__button {
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+}
+
+.confirm {
+    background-color: #af4c4c;
+}
+
+.cancel {
+    background-color: #4CAF50;
 }
 
 .hidden {
@@ -50,7 +81,7 @@ textarea {
     background-color: #45a049;
 }
 
-.blur {
+.blur, .blur-delete {
     position: fixed;
     top: 0;
     left: 0;

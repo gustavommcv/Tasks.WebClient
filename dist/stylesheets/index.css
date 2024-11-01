@@ -199,7 +199,8 @@ aside {
     font-size: 12px;
   }
 }
-.form {
+.form,
+.delete-confirmation {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -207,6 +208,31 @@ aside {
   background-color: rgb(225, 225, 225);
   padding: 2rem;
   border-radius: 20px;
+}
+.delete-confirmation {
+  background-color: white;
+  border: 1px solid rgb(172, 172, 172);
+}
+.delete-confirmation__title {
+  margin-bottom: 2rem;
+}
+.delete-confirmation__message {
+  margin-bottom: 1rem;
+}
+.delete-confirmation__button {
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+.confirm {
+  background-color: #af4c4c;
+}
+.cancel {
+  background-color: #4CAF50;
 }
 .hidden {
   display: none;
@@ -241,7 +267,8 @@ textarea {
 .submit-button:hover {
   background-color: #45a049;
 }
-.blur {
+.blur,
+.blur-delete {
   position: fixed;
   top: 0;
   left: 0;

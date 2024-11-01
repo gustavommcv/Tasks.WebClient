@@ -3,6 +3,7 @@ import { state } from "../data/state";
 import { getJSON } from "../helpers/getJSON";
 import { getStatusFromString } from "../helpers/getStatusFromString";
 import { postRequest } from "../helpers/postRequest";
+import { deleteRequest } from "../helpers/deleteRequest";
 
 export class Task {
     public id: string;
@@ -57,3 +58,6 @@ export const addTask = async function(task: Task | null) {
     await postRequest(taskData);
 }
 
+export const deleteTask = async function(id: string) {
+    await deleteRequest(id);
+}

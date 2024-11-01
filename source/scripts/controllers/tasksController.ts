@@ -29,21 +29,29 @@ const controlAddTask = async function() {
         await task.addTask(data);
 
         // 3) Update UI with new task
-        await task.loadTasks();
-        controlTasks();
+        await updateUI();
 
     } catch (error) {
         console.error("Error loading tasks: ", error);
     }
 }
 
-const controlDeleteTask = async function() {
+const controlDeleteTask = async function(id: string) {
     try {
+        // 1) Send delete reqeust
+        await task.deleteTask(id);
         
+        // 2) Update UI
+        await updateUI();
 
     } catch (error) {
         console.error("Error loading tasks: ", error);
     }
+}
+
+const updateUI = async function() {
+    await task.loadTasks();
+    await controlTasks();
 }
 
 export const init = async function() {

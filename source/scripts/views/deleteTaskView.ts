@@ -20,23 +20,34 @@ class DeleteViewTask extends View {
     }
 
     private bindEvents(handler: Function): void {
-        const deleteButtons = document.querySelectorAll('.delete');
+        const tbody = document.querySelector('.tbody');
     
-        deleteButtons.forEach(button => {
-            const deleteButton = button as HTMLElement; // Casting para HTMLElement
+        let id;
     
-            deleteButton.addEventListener('click', () => { 
-                const id = deleteButton.dataset.id;
-                const task = state.tasks.filter(t => t.id === id)[0];
-                
-                this.renderMenu(task.id, task.title);
-            });
+        // Delegation event for delete buttons
+        tbody?.addEventListener('click', (event) => {
+            const target = event.target as HTMLElement;
+            if (target.classList.contains('delete')) {
+                id = target.dataset.id;
+                const task = state.tasks.find(t => t.id === id);
+    
+                if (task) {
+                    this.renderMenu(task.id, task.title);
+                }
+            }
+        });
+    
+        const confirmDeleteBtn = document.querySelector('.delete-confirmation__button.confirm');
+        confirmDeleteBtn?.addEventListener('click', () => {
+            if (id) handler(id);
+            this.toggleMenu();
         });
     
         this.blurContainer?.addEventListener('click', () => this.toggleMenu());
         this.addCancelButtonEvent();
         this.addEscapeKeyEvent();
     }
+    
 
     private addCancelButtonEvent(): void {
         const cancelBtn = document.querySelector('.cancel') as HTMLElement;

@@ -121,6 +121,20 @@
     console.log("Task added successfully:", data);
   };
 
+  // source/scripts/helpers/deleteRequest.ts
+  var deleteRequest = async (id) => {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`Error adding task: ${errorMessage}`);
+    }
+  };
+
   // source/scripts/models/task.ts
   var Task = class {
     id;
@@ -163,6 +177,9 @@
       status: getStatusFromString(task.status)
     };
     await postRequest(taskData);
+  };
+  var deleteTask = async function(id) {
+    await deleteRequest(id);
   };
 
   // source/scripts/views/addTaskView.ts
@@ -249,14 +266,22 @@
       this.blurContainer = document.querySelector(".blur-delete");
     }
     bindEvents(handler) {
-      const deleteButtons = document.querySelectorAll(".delete");
-      deleteButtons.forEach((button) => {
-        const deleteButton = button;
-        deleteButton.addEventListener("click", () => {
-          const id = deleteButton.dataset.id;
-          const task = state.tasks.filter((t) => t.id === id)[0];
-          this.renderMenu(task.id, task.title);
-        });
+      const tbody = document.querySelector(".tbody");
+      let id;
+      tbody?.addEventListener("click", (event) => {
+        const target = event.target;
+        if (target.classList.contains("delete")) {
+          id = target.dataset.id;
+          const task = state.tasks.find((t) => t.id === id);
+          if (task) {
+            this.renderMenu(task.id, task.title);
+          }
+        }
+      });
+      const confirmDeleteBtn = document.querySelector(".delete-confirmation__button.confirm");
+      confirmDeleteBtn?.addEventListener("click", () => {
+        if (id) handler(id);
+        this.toggleMenu();
       });
       this.blurContainer?.addEventListener("click", () => this.toggleMenu());
       this.addCancelButtonEvent();
@@ -301,17 +326,22 @@
     try {
       const data = addTaskView_default.getFormData();
       await addTask(data);
-      await loadTasks();
-      controlTasks();
+      await updateUI();
     } catch (error) {
       console.error("Error loading tasks: ", error);
     }
   };
-  var controlDeleteTask = async function() {
+  var controlDeleteTask = async function(id) {
     try {
+      await deleteTask(id);
+      await updateUI();
     } catch (error) {
       console.error("Error loading tasks: ", error);
     }
+  };
+  var updateUI = async function() {
+    await loadTasks();
+    await controlTasks();
   };
   var init = async function() {
     await controlTasks();

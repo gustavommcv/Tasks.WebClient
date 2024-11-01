@@ -135,6 +135,23 @@
     }
   };
 
+  // source/scripts/helpers/updateRequest.ts
+  var updateRequest = async (taskData) => {
+    const response = await fetch(`${API_URL}/${taskData.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(taskData)
+    });
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`Error adding task: ${errorMessage}`);
+    }
+    const data = await response.json();
+    console.log("Task edit success:", data);
+  };
+
   // source/scripts/models/task.ts
   var Task = class {
     id;
@@ -177,6 +194,15 @@
       status: getStatusFromString(task.status)
     };
     await postRequest(taskData);
+  };
+  var editTask = async function(task) {
+    const taskData = {
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      status: getStatusFromString(task.status)
+    };
+    await updateRequest(taskData);
   };
   var deleteTask = async function(id) {
     await deleteRequest(id);
@@ -411,6 +437,8 @@
   var controlEditTask = async function(updatedTask) {
     try {
       console.log(updatedTask);
+      await editTask(updatedTask);
+      await updateUI();
     } catch (error) {
       console.error("Error loading tasks: ", error);
     }

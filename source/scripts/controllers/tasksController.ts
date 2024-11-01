@@ -39,7 +39,12 @@ const controlAddTask = async function() {
 
 const controlEditTask = async function(updatedTask) {
     try {
-        console.log(updatedTask)
+        // 1) Send edit request
+        console.log(updatedTask);
+        await task.editTask(updatedTask);
+
+        // 2) Update UI
+        await updateUI();
 
     } catch (error) {
         console.error("Error loading tasks: ", error);

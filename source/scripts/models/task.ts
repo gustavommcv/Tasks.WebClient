@@ -4,6 +4,7 @@ import { getJSON } from "../helpers/getJSON";
 import { getStatusFromString } from "../helpers/getStatusFromString";
 import { postRequest } from "../helpers/postRequest";
 import { deleteRequest } from "../helpers/deleteRequest";
+import { updateRequest } from "../helpers/updateRequest";
 
 export class Task {
     public id: string;
@@ -56,6 +57,18 @@ export const addTask = async function(task: Task | null) {
     };
 
     await postRequest(taskData);
+}
+
+export const editTask = async function (task) {
+
+    const taskData = {
+        id: task.id,
+        title: task.title,
+        description: task.description,
+        status: getStatusFromString(task.status),
+    };
+
+    await updateRequest(taskData);
 }
 
 export const deleteTask = async function(id: string) {

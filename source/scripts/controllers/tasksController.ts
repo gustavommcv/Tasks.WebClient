@@ -4,6 +4,7 @@ import deleteTaskView from '../views/deleteTaskView';
 
 import { state } from '../data/state';
 import * as task from '../models/task';
+import editTaskView from '../views/editTaskView';
 
 const controlTasks = async function(status = '') {
     try {
@@ -30,6 +31,15 @@ const controlAddTask = async function() {
 
         // 3) Update UI with new task
         await updateUI();
+
+    } catch (error) {
+        console.error("Error loading tasks: ", error);
+    }
+}
+
+const controlEditTask = async function(updatedTask) {
+    try {
+        console.log(updatedTask)
 
     } catch (error) {
         console.error("Error loading tasks: ", error);
@@ -63,6 +73,9 @@ export const init = async function() {
 
     // Rendering form from button event
     addTaskView.addEventHandlers(controlAddTask);
+
+    // Edit
+    editTaskView.addEventHandlers(controlEditTask);
 
     // Delete
     deleteTaskView.addEventHandlers(controlDeleteTask);

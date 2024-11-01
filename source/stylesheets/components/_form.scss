@@ -1,19 +1,20 @@
-.form, .delete-confirmation {
+.form, .form-edit, .delete-confirmation {
     position: fixed;
     top: 50%;
     left: 50%;
-
     transform: translate(-50%, -50%);
-
     background-color: rgb(225, 225, 225);
-    
     padding: 2rem;
     border-radius: 20px;
 }
 
+.form-edit {
+    background-color: rgb(240, 240, 240); // um tom um pouco diferente para diferenciar do formulário de criação
+}
+
 .delete-confirmation {
     background-color: white;
-    border: 1px solid  rgb(172, 172, 172);;
+    border: 1px solid rgb(172, 172, 172);
 
     &__title {
         margin-bottom: 2rem;
@@ -81,7 +82,7 @@ textarea {
     background-color: #45a049;
 }
 
-.blur, .blur-delete {
+.blur, .blur-delete, .blur-edit {
     position: fixed;
     top: 0;
     left: 0;

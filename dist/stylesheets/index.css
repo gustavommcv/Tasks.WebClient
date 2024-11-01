@@ -200,6 +200,7 @@ aside {
   }
 }
 .form,
+.form-edit,
 .delete-confirmation {
   position: fixed;
   top: 50%;
@@ -208,6 +209,9 @@ aside {
   background-color: rgb(225, 225, 225);
   padding: 2rem;
   border-radius: 20px;
+}
+.form-edit {
+  background-color: rgb(240, 240, 240);
 }
 .delete-confirmation {
   background-color: white;
@@ -268,7 +272,8 @@ textarea {
   background-color: #45a049;
 }
 .blur,
-.blur-delete {
+.blur-delete,
+.blur-edit {
   position: fixed;
   top: 0;
   left: 0;

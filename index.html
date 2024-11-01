@@ -49,6 +49,31 @@
         </div>
     </div>    
        
+    <div class="blur-edit hidden"></div>
+    <div class="form-edit hidden">
+        <form id="editTaskForm" class="task-form">
+            <div class="form-group">
+                <label for="edit-title">Title:</label>
+                <input type="text" id="edit-title" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-description">Description:</label>
+                <textarea id="edit-description" name="description" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-status">Status:</label>
+                <select id="edit-status" name="status">
+                    <option value="Pending">Pending</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+
+            <button type="submit" class="button submit-button edit-submit-button">Save Changes</button>
+        </form>
+        <button class="button close-button">Close</button>
+    </div>
 
     <header class="header">
         <div class="header__description">

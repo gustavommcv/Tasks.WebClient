@@ -312,6 +312,83 @@
   };
   var deleteTaskView_default = new DeleteViewTask();
 
+  // source/scripts/views/editTaskView.ts
+  var EditViewTask = class extends View {
+    editFormMenu;
+    blurEditContainer;
+    generateMarkup(element) {
+      throw new Error("Method not implemented.");
+    }
+    addEventHandlers(handler) {
+      this.cacheDOMElements();
+      this.bindEvents(handler);
+    }
+    cacheDOMElements() {
+      this.editFormMenu = document.querySelector(".form-edit");
+      this.blurEditContainer = document.querySelector(".blur-edit");
+    }
+    bindEvents(handler) {
+      const tbody = document.querySelector(".tbody");
+      let id;
+      tbody?.addEventListener("click", (event) => {
+        const target = event.target;
+        if (target.classList.contains("edit")) {
+          id = target.dataset.id;
+          const task = state.tasks.find((t) => t.id === id);
+          if (task) {
+            this.renderEditMenu(task);
+          }
+        }
+      });
+      document.querySelector(".edit-submit-button")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        const titleInput = document.querySelector("#edit-title");
+        const descriptionInput = document.querySelector("#edit-description");
+        const statusSelect = document.querySelector("#edit-status");
+        if (titleInput.value.trim() === "") {
+          alert("Title must have at least one character.");
+          return;
+        }
+        const updatedTask = {
+          id,
+          title: titleInput.value,
+          description: descriptionInput.value,
+          status: statusSelect.value
+        };
+        handler(updatedTask);
+        this.toggleEditMenu();
+      });
+      this.blurEditContainer?.addEventListener("click", () => this.toggleEditMenu());
+      this.addCloseButtonEvent();
+      this.addEscapeKeyEvent();
+    }
+    addCloseButtonEvent() {
+      const closeBtn = document.querySelector(".form-edit .close-button");
+      closeBtn?.addEventListener("click", () => this.toggleEditMenu());
+    }
+    addEscapeKeyEvent() {
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !this.editFormMenu?.classList.contains("hidden")) {
+          this.toggleEditMenu();
+        }
+      });
+    }
+    renderEditMenu(task) {
+      const titleInput = document.querySelector("#edit-title");
+      const descriptionInput = document.querySelector("#edit-description");
+      const statusSelect = document.querySelector("#edit-status");
+      if (titleInput) titleInput.value = task.title;
+      if (descriptionInput) descriptionInput.value = task.description;
+      if (statusSelect) statusSelect.value = task.status;
+      this.toggleEditMenu();
+    }
+    toggleEditMenu() {
+      this.editFormMenu?.classList.toggle("hidden");
+      this.blurEditContainer?.classList.toggle("hidden");
+    }
+  };
+  var editTaskView_default = new EditViewTask();
+
   // source/scripts/controllers/tasksController.ts
   var controlTasks = async function(status = "") {
     try {
@@ -327,6 +404,13 @@
       const data = addTaskView_default.getFormData();
       await addTask(data);
       await updateUI();
+    } catch (error) {
+      console.error("Error loading tasks: ", error);
+    }
+  };
+  var controlEditTask = async function(updatedTask) {
+    try {
+      console.log(updatedTask);
     } catch (error) {
       console.error("Error loading tasks: ", error);
     }
@@ -347,6 +431,7 @@
     await controlTasks();
     taskView_default.addHandlerRender(controlTasks);
     addTaskView_default.addEventHandlers(controlAddTask);
+    editTaskView_default.addEventHandlers(controlEditTask);
     deleteTaskView_default.addEventHandlers(controlDeleteTask);
   };
 
